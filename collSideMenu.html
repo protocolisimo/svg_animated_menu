@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Side Menu</title>
+</head>
+<body>
+        <div class="side-bar-wrapper">
+            <svg class="side-bar-substrate">
+                <path id="side-bar" fill="ff6600"></path>
+            </svg>
+            <div class="side-bar__item">
+                <span>home</span>
+            </div>
+            <div class="side-bar__item">
+                <span>product</span>
+            </div>
+            <div class="side-bar__item">
+                <span>faq</span>
+            </div>
+            <div class="side-bar__item">
+                <span>cart</span>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let
+                    sideBarBox = document.querySelector('.side-bar-substrate'),
+                    sideBar = document.querySelector('#side-bar'),
+                    height = window.innerHeight,
+                    openWidth = 450,
+                    closedWidth = 100,
+                    menuStart = false,
+                    x, y,
+                    delay = 0.1,
+                    path = "M 0 0 L "+ closedWidth +" 0 L 100 0 Q 100 "+ ((height / 100) * 25) +" 100 "+ (height /  2) +" Q 100 "+ ((height / 100) * 75) +" 100 "+ height +" L 0 "+ height +" z";
+
+                    sideBar.setAttribute('d', path);
+
+                document.onmousemove = function () {
+                    x = event.clientX;
+                    y = event.clientY;
+
+                    if (x <= 300) {
+                        path = "M 0 0 L 100 0 L 100 0 Q 130 "+ ( y - 150) +" 130 "+ y +" Q 130 "+ ( y + 150) +" 100 "+ height +" L 0 "+ height +" z";
+                    } else {
+                        path = "M 0 0 L 100 0 L 100 0 Q 100 "+ ((height / 100) * 25) +" 100 "+ (height /  2) +" Q 100 "+ ((height / 100) * 75) +" 100 "+ height +" L 0 "+ height +" z";
+                    }
+
+                    if (menuStart == false) {
+                        sideBar.setAttribute('d', path);
+                    }    
+                }
+
+                sideBar.addEventListener('click', function () {
+
+                    if (menuStart == false) {
+                        open();
+                    } else {
+                        close();
+                    }
+
+                    sideBar.setAttribute('d', path);
+                    document.querySelector('.side-bar-wrapper').classList.toggle('open');
+                })
+                
+                function open () {
+                    path = "M 0 0 L 450 0 L 450 0 Q 450 "+ ((height / 100) * 25) +" 450 "+ (height /  2) +" Q 450 "+ ((height / 100) * 75) +" 450 "+ height +" L 0 "+ height +" z";
+                    menuStart = true;
+                    sideBar.setAttribute('d', path);
+                }
+
+                function close () {
+                    path = "M 0 0 L 100 0 L 100 0 Q 100 "+ ((height / 100) * 25) +" 100 "+ (height /  2) +" Q 100 "+ ((height / 100) * 75) +" 100 "+ height +" L 0 "+ height +" z";
+                    menuStart = false;
+                    sideBar.setAttribute('d', path);
+                }
+
+                document.querySelectorAll('.side-bar__item').forEach(item => {
+                    item.style.animationDelay = ""+ delay +"s";
+                    delay += .05;
+                })
+                
+            });
+        </script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .side-bar-wrapper {
+                height: 100%;
+                width: 300px;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                
+                position: fixed;
+                top: 0; left: 0;
+
+                padding: 0 0 0 50px;
+            }
+                .side-bar-substrate {
+                    width: 100%;
+                    height: 100%;
+
+                    position: absolute; left: 0;
+                }
+
+                .side-bar__item {
+                    position: relative;
+                    z-index: 2;
+
+                    opacity: 0;
+                    transform: translate(-77px, -20px);
+                    transition: .5s;
+                    visibility: hidden;
+                }
+                    .side-bar-wrapper.open .side-bar__item {
+                        animation: appearance .5s linear forwards;
+                        visibility: visible;
+                    }
+
+                    .side-bar__item span {
+                        color: white;
+                        font-family: Arial;
+                        text-transform: uppercase;
+                    }
+
+            #side-bar {
+                transition: .09s;
+                cursor: pointer;
+            }
+
+            @keyframes appearance {
+                from {
+                    opacity: 0;
+                    transform: translate(-77px, -20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translate(0px, 0px);
+                }
+            }
+
+        </style>
+</body>
+</html>
